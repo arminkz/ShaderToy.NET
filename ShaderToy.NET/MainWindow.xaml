@@ -1,0 +1,15 @@
+﻿<Window x:Class="ShaderToy.NET.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShaderToy.NET"
+        xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
+        mc:Ignorable="d" Title="Shadertoy.NET"
+        Height="350" Width="525">
+    <Grid>
+        <sharpGL:OpenGLControl 
+            OpenGLDraw="OpenGLControl_OpenGLDraw" OpenGLInitialized="OpenGLControl_OpenGLInitialized"
+            RenderContextType="FBO" IsEnabled="False" />
+    </Grid>
+</Window>
