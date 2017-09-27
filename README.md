@@ -1,6 +1,7 @@
 # ShaderToy.NET
 A native shadertoy-compatible GLSL playground in .NET framework Environment
 
+![Alt text](/../master/shadertoy.gif?raw=true "ShaderToy.NET")
 
 ## Dependecies
 

@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="BitmapUpdateEventArgs.cs" />
     <Compile Include="ImageHelper.cs" />
+    <Compile Include="OptimusEnabler.cs" />
     <Compile Include="ResourceHelper.cs" />
     <Compile Include="Audio\SampleAggregator.cs" />
     <Compile Include="Shader.cs" />

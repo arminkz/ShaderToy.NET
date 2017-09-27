@@ -45,10 +45,6 @@ namespace ShaderToy.NET
         {
             InitializeComponent();
 
-            //Load Audio
-            //aud.Load(@"D:\Music\test\a1.mp3");
-
-
             LoadWasapiDevicesCombo();
             MicCombo.SelectedIndex = 0;
             mic = new Microphone((MMDevice)MicCombo.SelectedItem);
@@ -85,8 +81,8 @@ namespace ShaderToy.NET
             //scn.UpdateTextureBitmap(gl, 1, ab.lastBitmap);
             //scn.UpdateTextureBitmap(gl, 1, ImageHelper.BitmapImage2Bitmap(Ch0Image));
 
-            //scn.Draw(gl,(float)OpenGLControl.ActualWidth, (float)OpenGLControl.ActualHeight);
-            scn.Draw(gl, 300, 300);
+            scn.Draw(gl,(float)OpenGLControl.ActualWidth, (float)OpenGLControl.ActualHeight);
+            //scn.Draw(gl, 300, 300);
         }
 
         private void OpenGLControl_OpenGLInitialized(object sender, OpenGLEventArgs args)
