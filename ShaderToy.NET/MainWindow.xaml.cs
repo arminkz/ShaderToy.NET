@@ -11,77 +11,207 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Drawing;
+
+using MahApps.Metro.Controls;
+
 using SharpGL;
 using SharpGL.SceneGraph.Primitives;
 using SharpGL.SceneGraph;
+using SharpGL.SceneGraph.Assets;
+using Microsoft.Win32;
+
+using NAudio.CoreAudioApi;
 
 namespace ShaderToy.NET
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
+        OpenGL gl;
+        ShaderScene scn;
+        List<Shader> shaders = new List<Shader>();
+
+        AudioPlayback aud = new AudioPlayback();
+        Microphone mic;
+
+        AudioBitmap ab = new AudioBitmap();
+
+        BitmapImage Ch0Image;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            //Load Audio
+            //aud.Load(@"D:\Music\test\a1.mp3");
+
+
+            LoadWasapiDevicesCombo();
+            MicCombo.SelectedIndex = 0;
+            mic = new Microphone((MMDevice)MicCombo.SelectedItem);
+            
+            aud.FftCalculated += OnFftCalculated;
+            mic.FftCalculated += OnFftCalculated;
+
+            //Init Shaders
+            shaders.Add(new Shader("Waves", "waves_audio"));
+            shaders.Add(new Shader("Menger", "menger"));
+            shaders.Add(new Shader("Boxy", "boxy_audio"));
+            shaders.Add(new Shader("Waves Remix", "wave_remix_audio"));
+            shaders.Add(new Shader("Polar","polar_audio"));
+            shaders.Add(new Shader("Music Ball", "music_ball_audio"));
+            shaders.Add(new Shader("Cubescape","cubescape_audio"));
+            //shaders.Add(new Shader("QSA", "qsa"));
+            shaders.Add(new Shader("Sea", "sea"));
+            shaders.Add(new Shader("Mandelbrot", "mandelbrot"));
+
+            scn = new ShaderScene(shaders[0]);
+            shaderSelector.ItemsSource = shaders;
+            shaderSelector.SelectedIndex = 0;
+
+            ab.OnBitmapUpdated += (s, a) => scn.UpdateTextureBitmap(gl, 0, a.image);
         }
 
-        ShaderScene scn = new ShaderScene();
-        //float rotation = 0;
+       
 
         private void OpenGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
         {
-            OpenGL gl = args.OpenGL;
-            scn.Draw(gl);
-            /*
+            //OpenGL gl = args.OpenGL;
 
-            gl.ClearColor(1, 1, 1, 1);
-            // Clear The Screen And The Depth Buffer
-            gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+            //scn.UpdateTextureBitmap(gl, 0, ImageHelper.BitmapImage2Bitmap(Ch0Image));
+            //scn.UpdateTextureBitmap(gl, 1, ab.lastBitmap);
+            //scn.UpdateTextureBitmap(gl, 1, ImageHelper.BitmapImage2Bitmap(Ch0Image));
 
-            // Move Left And Into The Screen
-            gl.LoadIdentity();
-            gl.Translate(0.0f, 0.0f, -6.0f);
-
-
-            gl.Rotate(rotation, 0.0f, 1.0f, 0.0f);
-
-            Teapot tp = new Teapot();
-            tp.Draw(gl, 14, 1, OpenGL.GL_FILL);
-
-            rotation += 3.0f;*/
+            //scn.Draw(gl,(float)OpenGLControl.ActualWidth, (float)OpenGLControl.ActualHeight);
+            scn.Draw(gl, 300, 300);
         }
 
         private void OpenGLControl_OpenGLInitialized(object sender, OpenGLEventArgs args)
         {
-            OpenGL gl = args.OpenGL;
-            scn.Initialise(gl, (float)Width, (float)Height);
-            /*Console.WriteLine("OpenGL initialized !");
+            gl = args.OpenGL;
+            scn.Initialise(gl);
+
+            //init channel 0 (image)
+            Ch0Image = new BitmapImage(new Uri(@"C:/sta.jpg"));
+            CHO_ImageBox.Source = Ch0Image;
+            scn.UpdateTextureBitmap(gl, 1, ImageHelper.BitmapImage2Bitmap(Ch0Image));
+            //scn.UpdateTextureBitmap(gl, 1, ab.lastBitmap);
+
+            //texture1.Create(gl, ImageHelper.BitmapImage2Bitmap(Ch0Image));
+            //texture1.TextureName = "iChannel1";
+
+            //init channel 1 (audio)
+            //texture2.Create(gl);
             
-
-            gl.Enable(OpenGL.GL_DEPTH_TEST);
-
-            float[] global_ambient = new float[] { 0.5f, 0.5f, 0.5f, 1.0f };
-            float[] light0pos = new float[] { 0.0f, 5.0f, 10.0f, 1.0f };
-            float[] light0ambient = new float[] { 0.2f, 0.2f, 0.2f, 1.0f };
-            float[] light0diffuse = new float[] { 0.3f, 0.3f, 0.3f, 1.0f };
-            float[] light0specular = new float[] { 0.8f, 0.8f, 0.8f, 1.0f };
-
-            float[] lmodel_ambient = new float[] { 0.2f, 0.2f, 0.2f, 1.0f };
-            gl.LightModel(OpenGL.GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
-
-            gl.LightModel(OpenGL.GL_LIGHT_MODEL_AMBIENT, global_ambient);
-            gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_POSITION, light0pos);
-            gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_AMBIENT, light0ambient);
-            gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_DIFFUSE, light0diffuse);
-            gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_SPECULAR, light0specular);
-            gl.Enable(OpenGL.GL_LIGHTING);
-            gl.Enable(OpenGL.GL_LIGHT0);
-
-            gl.ShadeModel(OpenGL.GL_SMOOTH);*/
+            
         }
 
+        public void OnFftCalculated(object sender,FftEventArgs e)
+        {
+            NAudio.Dsp.Complex[] result = e.Result;
+            this.Dispatcher.Invoke(new Action(() => {
+                SpecAnalyser.Update(result);
+                ab.Update(OpenGLControl.OpenGL, result);
+            }));
+        }
 
+        private void Play_Audio(object sender, RoutedEventArgs e)
+        {
+            aud.Play();
+        }
+
+        private void Pause_Audio(object sender, RoutedEventArgs e)
+        {
+            aud.Pause();
+        }
+
+        private void Stop_Audio(object sender, RoutedEventArgs e)
+        {
+            aud.Stop();
+        }
+
+        private void Load_Audio(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Select Audio File";
+            ofd.Filter = "All Supported Files (*.wav;*.mp3)|*.wav;*.mp3";
+            bool? result = ofd.ShowDialog();
+            if(result.HasValue && result.Value)
+            {
+                aud.Stop();
+                aud.Load(ofd.FileName);
+                Play_Button.IsEnabled = true;
+                Pause_Button.IsEnabled = true;
+                Stop_Button.IsEnabled = true;
+            }
+        }
+
+        bool isFullScreen = false;
+        private void MakeFullScreen(object sender, RoutedEventArgs e)
+        {
+            if (!isFullScreen)
+            {
+                this.ShowTitleBar = false;
+                this.WindowState = WindowState.Maximized;
+                MainGrid.ColumnDefinitions[1].Width = new GridLength(0);
+                isFullScreen = true;
+            }
+            else
+            {
+                this.ShowTitleBar = true;
+                this.WindowState = WindowState.Normal;
+                MainGrid.ColumnDefinitions[1].Width = new GridLength(250);
+                isFullScreen = false;
+            }
+
+        }
+
+        private void Shader_SelectedChanged(object sender, SelectionChangedEventArgs e)
+        {
+            scn.ActiveShader = shaders[shaderSelector.SelectedIndex];
+        }
+
+        private void Start_Mic(object sender, RoutedEventArgs e)
+        {
+            mic.StartRecording();
+            MicStop_Button.IsEnabled = true;
+            MicStart_Button.IsEnabled = false;
+        }
+
+        private void Stop_Mic(object sender, RoutedEventArgs e)
+        {
+            mic.StopRecording();
+            MicStop_Button.IsEnabled = false;
+            MicStart_Button.IsEnabled = true;
+        }
+
+        //public ObservableCollection<MMDevice> MicDevices;
+        private void LoadWasapiDevicesCombo()
+        {
+            var deviceEnum = new MMDeviceEnumerator();
+            var devices = deviceEnum.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active).ToList();
+
+
+            MicCombo.ItemsSource = devices;
+            MicCombo.DisplayMemberPath = "FriendlyName";
+        }
+
+        private void Load_Image(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Select Image File";
+            //ofd.Filter = "All Supported Files (*.wav;*.mp3)|*.wav;*.mp3";
+            bool? result = ofd.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                Ch0Image = new BitmapImage(new Uri(ofd.FileName));
+                CHO_ImageBox.Source = Ch0Image;
+                scn.UpdateTextureBitmap(gl, 1, ImageHelper.BitmapImage2Bitmap(Ch0Image));
+            }
+            
+        }
     }
 }

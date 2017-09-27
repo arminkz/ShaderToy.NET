@@ -14,7 +14,8 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,6 +41,14 @@
       <HintPath>..\packages\GlmNet.0.5.1.0\lib\net40\GlmNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net40\MahApps.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NAudio, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.0\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SharpGL, Version=2.4.0.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpGL.2.4.0.0\lib\net40\SharpGL.dll</HintPath>
       <Private>True</Private>
@@ -54,6 +63,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net40\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -72,8 +88,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AudioBitmap.cs" />
+    <Compile Include="Audio\AudioPlayback.cs" />
+    <Compile Include="Audio\FftEventArgs.cs" />
+    <Compile Include="Audio\Microphone.cs" />
+    <Compile Include="Audio\MicrophoneAggregator.cs" />
+    <Compile Include="Audio\SpectrumAnalyser.xaml.cs">
+      <DependentUpon>SpectrumAnalyser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BitmapUpdateEventArgs.cs" />
+    <Compile Include="ImageHelper.cs" />
     <Compile Include="ResourceHelper.cs" />
+    <Compile Include="Audio\SampleAggregator.cs" />
+    <Compile Include="Shader.cs" />
     <Compile Include="ShaderScene.cs" />
+    <EmbeddedResource Include="Shaders\cubescape_audio.frag" />
+    <EmbeddedResource Include="Shaders\simple_audio.frag" />
+    <Page Include="Audio\SpectrumAnalyser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -113,9 +147,53 @@
     <AppDesigner Include="Properties\" />
     <EmbeddedResource Include="Shaders\main.frag" />
     <EmbeddedResource Include="Shaders\main.vert" />
+    <EmbeddedResource Include="Shaders\blue_flame.frag" />
+    <EmbeddedResource Include="Shaders\mandelbrot.frag" />
+    <EmbeddedResource Include="Shaders\menger.frag" />
+    <EmbeddedResource Include="Shaders\audio_test.frag" />
+    <EmbeddedResource Include="Shaders\fractal_audio.frag" />
+    <EmbeddedResource Include="Shaders\polar_audio.frag" />
+    <EmbeddedResource Include="Shaders\ecllipse_audio.frag" />
+    <EmbeddedResource Include="Shaders\vol_lines_audio.frag" />
+    <EmbeddedResource Include="Shaders\waves_audio.frag" />
+    <EmbeddedResource Include="Shaders\sea.frag" />
+    <EmbeddedResource Include="Shaders\wave_remix_audio.frag" />
+    <EmbeddedResource Include="Shaders\music_ball_audio.frag" />
+    <EmbeddedResource Include="Shaders\qsa.frag" />
+    <EmbeddedResource Include="Shaders\boxy_audio.frag" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\tex00.jpg" />
+    <Resource Include="Textures\tex01.jpg" />
+    <Resource Include="Textures\tex02.jpg" />
+    <Resource Include="Textures\tex03.jpg" />
+    <Resource Include="Textures\tex04.jpg" />
+    <Resource Include="Textures\tex05.jpg" />
+    <Resource Include="Textures\tex06.jpg" />
+    <Resource Include="Textures\tex07.jpg" />
+    <Resource Include="Textures\tex08.jpg" />
+    <Resource Include="Textures\tex09.jpg" />
+    <Resource Include="Textures\tex10.png" />
+    <Resource Include="Textures\tex11.png" />
+    <Resource Include="Textures\tex12.png" />
+    <Resource Include="Textures\tex14.png" />
+    <Resource Include="Textures\tex15.png" />
+    <Resource Include="Textures\tex16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\open-file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\speaker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\full-screen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
