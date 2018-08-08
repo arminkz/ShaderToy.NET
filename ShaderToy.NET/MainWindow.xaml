@@ -9,12 +9,16 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d" Title="Shadertoy.NET"
         Background="Black"
-        Height="720" Width="1280">
+        Height="720" Width="1280"
+        
+        BorderBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="2"
+                      
+        >
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v" />
     </Window.Resources>
-    
-    <Border BorderThickness="5,0,5,5" BorderBrush="#FF0E7EAE">
+
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -25,14 +29,14 @@
             OpenGLDraw="OpenGLControl_OpenGLDraw" OpenGLInitialized="OpenGLControl_OpenGLInitialized"
             RenderContextType="FBO" DrawFPS="True" />
         </Border>
-            <Button  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="25" Click="MakeFullScreen">
-                <Image Source="Image/full-screen.png" Width="20" Height="20"/>
-            </Button>
-            <StackPanel Grid.Column="1"  Background="White">
+        <Button  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="25" Click="MakeFullScreen">
+            <Image Source="Image/full-screen.png" Width="20" Height="20"/>
+        </Button>
+        <StackPanel Grid.Column="1"  Background="White">
 
             <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="15,10,15,15">
                 <StackPanel>
-                    <Label Margin="5">Shader :</Label> 
+                    <Label Margin="5">Shader :</Label>
                     <ComboBox Name="shaderSelector" Margin="20,10,20,20" SelectionChanged="Shader_SelectedChanged"
                               HorizontalContentAlignment="Stretch">
                         <ComboBox.ItemTemplate>
@@ -59,12 +63,12 @@
             <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="15,0,15,15">
                 <StackPanel>
                     <Label Margin="5">Channel 0 (Audio) :</Label>
-                        <StackPanel Orientation="Horizontal" Margin="20,3,3,3">
-                            <RadioButton Name="Mic_RB" GroupName="audio_src" Content="Microphone" Margin="4" IsChecked="True" />
-                            <RadioButton Name="File_RB" GroupName="audio_src" Content="File" Margin="8,4,4,4" />
-                        </StackPanel>
-                        <aud:SpectrumAnalyser x:Name="SpecAnalyser" Height="50"/>
-                        <WrapPanel Margin="20,10,20,20" Visibility="{Binding IsChecked,ElementName=File_RB,Converter={StaticResource b2v}}">
+                    <StackPanel Orientation="Horizontal" Margin="20,3,3,3">
+                        <RadioButton Name="Mic_RB" GroupName="audio_src" Content="Microphone" Margin="4" IsChecked="True" />
+                        <RadioButton Name="File_RB" GroupName="audio_src" Content="File" Margin="8,4,4,4" />
+                    </StackPanel>
+                    <aud:SpectrumAnalyser x:Name="SpecAnalyser" Height="50"/>
+                    <WrapPanel Margin="20,10,20,20" Visibility="{Binding IsChecked,ElementName=File_RB,Converter={StaticResource b2v}}">
                         <Button Name="Play_Button" Click="Play_Audio" IsEnabled="False">
                             <Path Fill="DarkGreen" Margin="3" Width="15" Height="15" Data="M 0,0 L 1,1 L 0,2 Z" Stretch="Fill" StrokeLineJoin="Round"/>
                         </Button>
@@ -78,16 +82,16 @@
                             <Image Width="20" Height="20" Source="Image/open-file.png" />
                         </Button>
                     </WrapPanel>
-                        <WrapPanel Margin="20,10,20,5" Visibility="{Binding IsChecked,ElementName=Mic_RB,Converter={StaticResource b2v}}">
-                            <Button Name="MicStart_Button" Click="Start_Mic" >
-                                <Path Fill="Red" Margin="3" Width="15" Height="15" Data="M 0,0 A 180,180 180 1 1 1,1 Z" Stretch="Fill" StrokeLineJoin="Round"/>
-                            </Button>
-                            <Button Name="MicStop_Button" Click="Stop_Mic" Margin="5,0,0,0" IsEnabled="False">
-                                <Rectangle Fill="DarkBlue" Width="15" Height="15" Margin="3" RadiusX="2" RadiusY="2"/>
-                            </Button>
-                        </WrapPanel>
-                        <ComboBox Name="MicCombo" Margin="20,5,20,20" Visibility="{Binding IsChecked,ElementName=Mic_RB,Converter={StaticResource b2v}}"/>
-                    </StackPanel>
+                    <WrapPanel Margin="20,10,20,5" Visibility="{Binding IsChecked,ElementName=Mic_RB,Converter={StaticResource b2v}}">
+                        <Button Name="MicStart_Button" Click="Start_Mic" >
+                            <Path Fill="Red" Margin="3" Width="15" Height="15" Data="M 0,0 A 180,180 180 1 1 1,1 Z" Stretch="Fill" StrokeLineJoin="Round"/>
+                        </Button>
+                        <Button Name="MicStop_Button" Click="Stop_Mic" Margin="5,0,0,0" IsEnabled="False">
+                            <Rectangle Fill="DarkBlue" Width="15" Height="15" Margin="3" RadiusX="2" RadiusY="2"/>
+                        </Button>
+                    </WrapPanel>
+                    <ComboBox Name="MicCombo" Margin="20,5,20,20" Visibility="{Binding IsChecked,ElementName=Mic_RB,Converter={StaticResource b2v}}"/>
+                </StackPanel>
             </Border>
 
             <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="15,0,15,15">
@@ -96,18 +100,13 @@
                     <Border Height="100" BorderBrush="#AAA" BorderThickness="1" Margin="20,10,20,0" CornerRadius="5">
                         <Image Name="CHO_ImageBox" />
                     </Border>
-                        <WrapPanel Margin="20,10,20,20">
-                            <Button Click="Load_Image" Margin="5,0,0,0">
-                                <Image Width="20" Height="20" Source="Image/open-file.png" />
-                            </Button>
-                        </WrapPanel>
-                    </StackPanel>
+                    <WrapPanel Margin="20,10,20,20">
+                        <Button Click="Load_Image" Margin="5,0,0,0">
+                            <Image Width="20" Height="20" Source="Image/open-file.png" />
+                        </Button>
+                    </WrapPanel>
+                </StackPanel>
             </Border>
-
-            
-
         </StackPanel>
-        
     </Grid>
-    </Border>
 </Controls:MetroWindow>
