@@ -53,16 +53,17 @@ namespace ShaderToy.NET
             mic.FftCalculated += OnFftCalculated;
 
             //Init Shaders
-            shaders.Add(new Shader("Waves", "waves_audio"));
-            shaders.Add(new Shader("Menger", "menger"));
-            shaders.Add(new Shader("Boxy", "boxy_audio"));
-            shaders.Add(new Shader("Waves Remix", "wave_remix_audio"));
-            shaders.Add(new Shader("Polar","polar_audio"));
-            shaders.Add(new Shader("Music Ball", "music_ball_audio"));
-            shaders.Add(new Shader("Cubescape","cubescape_audio"));
+            //shaders.Add(new Shader("Waves", "waves_audio"));
+            //shaders.Add(new Shader("Menger", "menger"));
+            //shaders.Add(new Shader("Boxy", "boxy_audio"));
+            //shaders.Add(new Shader("Waves Remix", "wave_remix_audio"));
+            //shaders.Add(new Shader("Polar","polar_audio"));
+            //shaders.Add(new Shader("Music Ball", "music_ball_audio"));
+            //shaders.Add(new Shader("Cubescape","cubescape_audio"));
+            //shaders.Add(new Shader("Mandelbrot", "mandelbrot"));
             //shaders.Add(new Shader("QSA", "qsa"));
             shaders.Add(new Shader("Sea", "sea"));
-            shaders.Add(new Shader("Mandelbrot", "mandelbrot"));
+
 
             scn = new ShaderScene(shaders[0]);
             shaderSelector.ItemsSource = shaders;

@@ -103,8 +103,6 @@
     <Compile Include="Audio\SampleAggregator.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="ShaderScene.cs" />
-    <EmbeddedResource Include="Shaders\cubescape_audio.frag" />
-    <EmbeddedResource Include="Shaders\simple_audio.frag" />
     <Page Include="Audio\SpectrumAnalyser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -148,20 +146,7 @@
     <AppDesigner Include="Properties\" />
     <EmbeddedResource Include="Shaders\main.frag" />
     <EmbeddedResource Include="Shaders\main.vert" />
-    <EmbeddedResource Include="Shaders\blue_flame.frag" />
-    <EmbeddedResource Include="Shaders\mandelbrot.frag" />
-    <EmbeddedResource Include="Shaders\menger.frag" />
-    <EmbeddedResource Include="Shaders\audio_test.frag" />
-    <EmbeddedResource Include="Shaders\fractal_audio.frag" />
-    <EmbeddedResource Include="Shaders\polar_audio.frag" />
-    <EmbeddedResource Include="Shaders\ecllipse_audio.frag" />
-    <EmbeddedResource Include="Shaders\vol_lines_audio.frag" />
-    <EmbeddedResource Include="Shaders\waves_audio.frag" />
     <EmbeddedResource Include="Shaders\sea.frag" />
-    <EmbeddedResource Include="Shaders\wave_remix_audio.frag" />
-    <EmbeddedResource Include="Shaders\music_ball_audio.frag" />
-    <EmbeddedResource Include="Shaders\qsa.frag" />
-    <EmbeddedResource Include="Shaders\boxy_audio.frag" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
